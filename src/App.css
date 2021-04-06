@@ -1,0 +1,2987 @@
+/* COLORS:
+  gray: #838283
+*/
+
+/* fixed debug box in bottom right */
+#debug {
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  white-space: pre;
+  font-family: monospace;
+  font-size: 10px;
+  color: lightblue;
+}
+
+html, body, #root, #app {
+  height: 100%;
+  font-size: 16px;
+}
+
+body, textarea {
+  font-weight: 300;
+  font-family: 'Helvetica';
+  line-height: 1.25;
+}
+
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
+}
+
+button {
+  font-size: 16px;
+}
+
+a {
+  cursor: pointer;
+  text-decoration-line: underline;
+  outline: none;
+  color: #1b6f9a;
+  font-weight: 400;
+}
+
+/* Headings */
+h1 {
+  font-size: 32px;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+h2 {
+  font-size: 100%;
+  font-weight: 300;
+  border-bottom: solid 1px black;
+  margin-bottom: 25px;
+}
+
+.dark h2 {
+  border-bottom: solid 1px white;
+}
+
+ul {
+  margin-left: 1.5em;
+  padding-left: 0;
+}
+
+ul ul {
+  margin-left: 1.2em;
+}
+
+ul ul.context-chain {
+  margin-left: 1.6em;
+}
+
+li {
+  list-style: none;
+}
+
+textarea {
+  width: calc(100% - 40px);
+  display: block;
+  margin: 0 auto;
+  height: 50vh;
+  padding: 10px;
+  font-size: 16px;
+  border: solid 1px #ddd;
+}
+
+.dark textarea {
+  color: white;
+  border: solid 1px #333;
+  background-color: black;
+}
+
+.clear { clear: both; }
+.relative { position: relative; }
+.missing { color: #ccc; }
+.direct { color: #212121; }
+.center { text-align: center; }
+.left { text-align: left; }
+.hidden { display: none !important; }
+.shown { display: inline-block; }
+
+@media screen and (min-width: 600px) {
+  .center-desktop { text-align: center; }
+}
+.upper-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+a.button {
+  padding: 4px 30px;
+  min-width: 120px;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 99px;
+  color: white;
+  background-color: black;
+}
+
+a.button:active {
+  background-color: #111;
+}
+
+.button-small {
+  padding: 2px 0;
+}
+
+a.button-less-padding {
+  padding: 4px 12px;
+}
+
+.dark a.button {
+  color: black;
+  background-color: white;
+}
+
+.dark a.button:active {
+  background-color: #dcdcdc;
+}
+
+.dark .tutorial-text a.button {
+  color: black;
+}
+
+a.button-variable-width {
+  min-width: 0;
+}
+
+a.button[disabled] {
+  opacity: 0.25;
+  pointer-events: none;
+  cursor: auto;
+}
+
+button[disabled] {
+  opacity: 0.25;
+  pointer-events: none;
+  cursor: auto;
+}
+
+a.button-dim {
+  opacity: 0.5;
+}
+
+a.text-link {
+  text-decoration: underline;
+}
+
+.text-small {
+  font-size: 80%;
+}
+
+.list-none li::before {
+  display: none;
+}
+
+.list-bullet li {
+  list-style: disc;
+}
+
+.expand-click-area-left {
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: -10px;
+}
+
+.expand-click-area-right {
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.breadcrumbs .num-contexts {
+  margin-right: -0.5em;
+}
+
+.breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.recently-edited-breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.context-breadcrumbs {
+  font-size: 13px;
+  color: gray;
+  margin-top: 8px;
+  min-height: 1rem;
+}
+
+.context-breadcrumbs .superscript-container {
+  position: relative;
+  left: -2px;
+  top: -3px;
+}
+
+.thought-annotation .context-breadcrumbs {
+  margin-right: 2px;
+}
+
+.context-breadcrumbs .depth-bar {
+  display: none;
+}
+
+/* required to avoid iPhone converting to emoji
+ https://stackoverflow.com/questions/11178433/how-do-i-stop-ios-from-converting-a-small-pointing-right-triangle-character-into
+ */
+.left-triangle::after {
+  content: "\25C0 \FE0E";
+}
+.right-triangle::after {
+  content: "\25B6 \FE0E";
+}
+
+/* Toolbar */
+
+.toolbar-container {
+  position: fixed;
+  text-align: right;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  max-width: 88%;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.toolbar {
+  touch-action: inherit;
+  display: inline-flex;
+  overflow-x: scroll;
+  max-width: 100%;
+  z-index: 2;
+  -ms-overflow-style: none;
+  background-color: white;
+  box-shadow: 10px -20px 15px 25px white;
+}
+
+.dark .toolbar {
+  background-color: black;
+  box-shadow: 10px -20px 15px 25px black;
+}
+
+.toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile .toolbar {
+  right: 5px;
+}
+
+#left-arrow, #right-arrow {
+  font-size: 80%;
+  position: fixed;
+  padding-top: 16px;
+  vertical-align: middle;
+  color: gray;
+  background-color: white;
+  z-index: 5;
+  display: inline-block;
+  line-height: 20px;
+}
+
+.dark #left-arrow,
+.dark #right-arrow {
+  background-color: black;
+}
+
+#left-arrow {
+  padding-left: 5px;
+  padding-right: 4px;
+}
+
+#right-arrow {
+  right: -1px;
+  padding-right: 13px;
+  padding-left: 4px;
+}
+
+.toolbar-overlay {
+  touch-action: inherit;
+  display: inline-block;
+  width: 150px;
+  text-align: left;
+  font-size: 14px;
+  margin: 15px 20px 20px 5px;
+  z-index: 5;
+  background-color: #ccc;
+  padding: 10px;
+  box-shadow: 5px 5px 10px 0px #ccc;
+  border-top: solid 1px #cdcdcd;
+  border-left: solid 1px #cdcdcd;
+  border-bottom: solid 1px #cbcbcb;
+  border-right: solid 1px #cbcbcb;
+}
+
+.dark .toolbar-overlay {
+  color: white;
+  background-color: #333;
+  border-top: solid 1px #333;
+  border-left: solid 1px #333;
+  border-bottom: solid 1px #3c3c3c;
+  border-right: solid 1px #3c3c3c;
+  box-shadow: 5px 5px 10px 0px #222;
+}
+
+.touch-toolbar-overlay {
+  touch-action: inherit;
+  position: fixed;
+  width: 150px;
+  max-width: 100%;
+  top: 35%;
+  left: 45%;
+  text-align: left;
+  font-size: 13px;
+  border-color: #87ceeb;
+  margin: 0;
+  z-index: 5;
+  padding: 10px;
+  background-color: #ccc;
+}
+
+.dark .touch-toolbar-overlay {
+  color: white;
+  background-color: #333;
+}
+
+.overlay-name {
+  font-weight: bolder;
+  margin-bottom: 5px;
+}
+
+.overlay-shortcut {
+  opacity: 0.5;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.overlay-body {
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.toolbar-icon {
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.toolbar-icon .icon {
+  padding-top: 10px;
+  flex: 1;
+}
+
+.icon-text {
+  flex: 8;
+  font-size: 12px;
+}
+
+/* Toolbar mask */
+.toolbar-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background-color: white;
+  box-shadow: 10px -20px 15px 25px white;
+}
+
+.dark .toolbar-mask {
+  background-color: black;
+  box-shadow: 10px -20px 15px 25px black;
+}
+
+@media only screen and (max-width: 768px) {
+  .touch-toolbar-overlay {
+    touch-action: inherit;
+    position: fixed;
+    width: 120px;
+    top: 25%;
+    left: 35%;
+    color: #fff;
+    text-align: left;
+    font-size: 13px;
+    border-color: #87ceeb;
+    margin: 0;
+    z-index: 5;
+  }
+}
+
+/* Thoughts */
+
+[contenteditable] {
+  outline: none;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.thought, .thought-annotation {
+  width: calc(100% - 10px); /* expand click area. offset content padding to prevent line break */
+  font-weight: 300;
+  margin-top: 0;
+  margin-left: 0.66em;
+  display: inline-block;
+  vertical-align: top;
+  white-space: pre-wrap;
+}
+
+.thought-annotation {
+  position: absolute; /* cannot use position:absolute as it changes what the width is relative to */
+  pointer-events: none;
+  /* offset parent container (.child) padding-left since position:absolute changes the width calculation; */
+  box-sizing: border-box;
+  width: auto;
+  padding-right: .5rem;
+}
+
+.thought-annotation .subthought {
+  display: inline-block;
+}
+
+/* set z-index on .thought-annotation links such as .external-link so they are above .editable and thus clickable */
+.thought-annotation a {
+  position: relative;
+  z-index: 1;
+}
+
+.subthought-text, .thought-annotation .breadcrumbs {
+  visibility: hidden;
+}
+
+.subthought-highlight {
+  border-bottom: solid 1px;
+}
+
+.thought-annotation .num-contexts {
+  position: absolute;
+}
+
+.child .editable {
+  padding-left: 5px; /* Add padding otherwise cursor disappears on empty elements */
+  /* Cannot use padding-right, as it throws off the cursor when editing end of line. */
+  margin-top: -0.25em; /* offset padding-top */
+  margin-left: -5px; /* offset padding-left */
+  padding-bottom: 0.25em;
+  padding-top: 0.25em;
+  position: relative; /* position above thought-annotation so that function background color does not mask thought */
+}
+
+.child .editable, .subthought-text {
+  word-break: break-word; /* breaks urls; backwards-compatible with regular text unlike break-all */
+}
+
+.mobile .child .editable {
+  padding-bottom: 0;
+}
+
+.children .thought > .editable,
+.children .thought-annotation > .editable {
+  margin-bottom: -0.25em;
+}
+
+.children {
+  font-size: 15px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.children .child:first-child {
+  padding-top: 0.5em;
+}
+
+/* Additional space not needed due to children-subheading */
+.children .child.show-contexts:first-child {
+  padding-top: calc(0.5em - 4px); /* offset top */
+}
+
+.children .children {
+  /* create stacking context so modal appears above */
+  position: relative;
+  z-index: 1;
+}
+
+.children {
+  transition:
+    transform 0.75s ease-out,
+    opacity 0.75s ease-out,
+    color 0.75s ease-out,
+
+    /* prose view */
+    margin-left 0.4s ease-out,
+    margin-top 0.4s ease-out,
+    margin-bottom 0.4s ease-out;
+
+  backface-visibility: hidden;
+}
+
+.children > .child {
+  transition: transform 0.75s ease-out, opacity 0.75s ease-out, color 0.75s ease-out;
+  /*causes next siblings to overlap z-index*/
+  /*perspective: 1000;*/
+  backface-visibility: hidden;
+}
+
+/* needs to be -1 for children of modal child. */
+.modal-container .children {
+  position: relative;
+  z-index: -1;
+}
+
+.children-subheading {
+  position: relative;
+  margin-top: 3px;
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+}
+
+/* siblings after the modal have to be simply hidden because the above trick doesn't work */
+.sibling-after {
+  visibility: hidden;
+}
+
+.ellipsis {
+  font-size: 75%;
+}
+
+.down-chevron {
+  font-style: normal;
+  font-size: 125%;
+  line-height: 0;
+}
+
+.up-chevron {
+  font-style: normal;
+  font-size: 75%;
+  position: relative;
+  top: 2px;
+}
+
+.content {
+  background-color: white;
+  color: #111;
+  padding: 75px 10px 153px 50px /* padding-bottom must cover the footer (logged out: 79px, logged in: 93px) plus some additional visual spacing */;
+  position: relative;
+  transition: transform 0 ease-out, margin 0 ease-out; /* add transition time after initial load and scroll into place */
+  overflow: hidden; /* prevent expanded click areas from adding scroll-x */
+  box-sizing: border-box; /* make height include padding so that the min-height can be exctly 100vh */
+  max-width: 66%;
+  margin: 0 auto;
+  min-height: 100vh; /* forces footer to bottom when there is little content */
+}
+
+@media (max-width: 960px) {
+  .content {
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 560px) {
+  .content {
+    max-width: 50em;
+    padding-left: 40px;
+  }
+}
+
+/* reduce bottom space during tutorial to try to keep the tutorial in view as much as possible */
+.content-tutorial {
+  min-height: auto;
+  padding-bottom: 20px;
+}
+
+body.dark {
+  color: white;
+  background-color: black;
+}
+
+.dark .root, .dark .content, .dark .modal {
+  background-color: black;
+  color: #e3e3e3;
+}
+
+.dark .footer a,
+.dark .tutorial-text a {
+  color: #87ceeb;
+}
+
+.logo {
+  width: 24px;
+}
+
+/* Navigation styles */
+.nav {
+  position: sticky;
+  z-index: 1;
+  padding: 0 15px 0 10px;
+}
+
+.nav-container {
+  position: absolute;
+  width: calc(100% - 30px); /* offset .nav padding */
+  transition: background-color 0.2s ease-out;
+}
+
+.nav-fill {
+  background-color: white;
+}
+
+.dark .nav-fill {
+  background-color: black;
+}
+
+.nav-top {
+  top: 0;
+}
+
+.nav-bottom-wrapper {
+  position: sticky;
+  /* cannot use safe-area-inset here because of mobile Safari z-index issues. */
+  bottom: 0;
+}
+
+.nav-bottom {
+  padding: 0 15px;
+}
+
+.nav-bottom .nav-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  /* rounded screens */
+  padding-bottom: calc(max(10px, env(safe-area-inset-bottom)));
+}
+
+.home .logo-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.nav .home {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-top .home {
+  float: left;
+  margin-right: 2px; /* spacing before breadcrumbs */
+}
+
+.nav-bottom .home {
+  position: absolute;
+  left: -2px;
+}
+
+.modal .home {
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  margin-top: -10px;
+}
+
+.thought .home {
+  position: relative;
+  top: -4px;
+  left: -2px;
+}
+
+.thought-annotation .home {
+  display: none;
+}
+
+.alert {
+  position: fixed;
+  width: 100%;
+  top: 8px;
+  padding: 5px 0;
+  color: gray;
+  text-align: center;
+  background-color: rgba(256, 256, 256, 0.8);
+  z-index: 11; /* above breadcrumbs, toolbar, export modal and status */
+}
+
+.dark .alert {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.alert-text {
+  padding: 5px 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: inline-block;
+}
+
+.dark .alert-text {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.error-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 5px 25px 5px 5px; /* extra padding-right to make room for x */
+  background-color: #c23;
+  color: white;
+  text-align: center;
+  z-index: 4; /* above breadcrumbs, hamburger menu, and toolbar */
+  word-break: break-word; /* break at normal word boundary but also within word if it exceeds width of container */
+}
+
+.status {
+  color: #aaa;
+  background-color: rgba(255, 255, 255, 0.8);
+  float: left;
+  position: fixed;
+  top: 5;
+  z-index: 4; /* above breadcrumbs, hamburger menu, and toolbar */
+}
+
+.status span {
+  padding: 15px 15px 10px 15px;
+  display: inline-block;
+}
+
+.dark .status {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #e3e3e3;
+}
+
+.dark .offline {
+  color: #666;
+}
+
+.nav-breadcrumbs {
+  width: 100%;
+  color: #999;
+  padding-left: 15px;
+  font-size: 14px;
+  vertical-align: bottom;
+}
+
+.nav-breadcrumbs.nonempty {
+  box-shadow: 0 10px 15px 25px white;
+  clip-path: inset(-30px -30px 0 -30px) /* clip box-shadow to top half to prevent covering footer on mobile Safari (z-index doesn't work) */
+}
+
+.dark .nav-breadcrumbs.nonempty {
+  box-shadow: 0 10px 15px 25px black;
+}
+
+/* to remove padding from breadcrumbs used inside sidebar recenlty edited thoughts  */
+.thoughts-tab .nav-breadcrumbs {
+  padding: 0;
+}
+
+/** offset logo */
+.nav-bottom .nav-breadcrumbs {
+  width: calc(100% - 40px);
+  padding-left: 35px;
+}
+
+.nav-breadcrumbs a {
+  color: #999;
+}
+
+.nav-breadcrumbs a:hover {
+  color: black;
+}
+
+.dark .nav-breadcrumbs a:hover {
+  color: white;
+}
+
+.breadcrumb-divider {
+  font-size: 8px;
+  line-height: 16px;
+  margin: 0 3px;
+  vertical-align: 1px;
+}
+
+/* react-transition-group animation: fade */
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+/* react-transition-group animation: fade */
+.fade-600-enter {
+  opacity: 0;
+}
+
+.fade-600-enter-active {
+  opacity: 1;
+  transition: opacity 600ms ease 0ms;
+}
+
+.fade-600-exit {
+  opacity: 1;
+}
+
+.fade-600-exit-active {
+  opacity: 0;
+  transition: opacity 700ms ease 0ms;
+}
+
+/* react-transition-group animation: slide */
+.slide-enter {
+  transform: translateX(100vw);
+  opacity: 0;
+  position: absolute;
+}
+
+.slide-enter.slide-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 200ms ease-in-out 200ms;
+}
+
+.slide-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-exit.slide-exit-active {
+  transform: translateX(-100vw);
+  opacity: 0;
+}
+
+.error {
+  color: red;
+}
+
+.online {
+  color: lightgreen;
+}
+
+.link {
+  word-break: break-word;
+}
+
+.superscript-container {
+  /*position: relative;*/
+  /*left: -5px;*/ /* offset .child .editable padding */
+  white-space: nowrap; /* prevent expanded click area from wrapping */
+  z-index: 1;
+}
+
+.superscript-container sup {
+  position: relative;
+  z-index: 1; /* above depth-bar */
+}
+
+.num-contexts {
+  font-size: 60%;
+  white-space: nowrap; /* prevent long depth-bars from wrapping */
+  /* Upping this z-index to overlay .depth-bar will also cause it to overlay modal. Instead lower the depth-bar z-index */
+  /*z-index: 1;*/
+}
+
+.num-contexts > sup {
+  top: -1px;
+  left: 1px;
+}
+
+.num-contexts > sup > a {
+  padding-right: 15px; /* additional click area */
+  margin-right: -15px;
+  padding-bottom: 8px;
+  margin-bottom: -8px;
+}
+
+h1 .num-contexts {
+  font-size: 40%;
+  top: -4px;
+  left: 1px;
+}
+
+.add-new-thought-link {
+  display: inline-block;
+  color: #ccc;
+  position: relative;
+}
+
+.depth-bar {
+  position: absolute;
+  margin-left: 5px;
+  display: inline-block;
+  height: 2px;
+  background-color: #ddd;
+  transition: background-color 0.75s ease-out;
+  /*margin-top: 1em;*/
+  margin-top: 0.6em;
+  /*margin-left: 3px;*/
+}
+
+.num-contexts .depth-bar {
+  margin-top: 1em;
+  margin-left: 0px;
+}
+
+.has-other-contexts {
+  margin-left: 12px;
+}
+
+.from > :first-child > .thought-container > .thought {
+  font-weight: 400;
+}
+
+.add-new-thought {
+  outline: none;
+  min-width: 3.75em;
+  display: inline-block;
+  border-bottom: solid 1px #ccc;
+  margin-left: -2px;
+}
+
+.search[contenteditable] {
+  display: block;
+  padding-top: 0;
+}
+
+.center-in-content {
+  text-align: center;
+  margin-left: -30px;
+}
+
+.absolute-center {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 10%; /* slightly above the fold */
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.text-note, .placeholder, [placeholder]:empty::before {
+  font-style: italic;
+  color: rgba(7,7,7,0.5);
+}
+
+/* empty class is set dynamically by javascript during editing. */
+/* :empty does not work because thought may contain <br> */
+[placeholder]:empty::before {
+  content: attr(placeholder);
+  cursor: text;
+}
+
+.search:empty::before {
+  padding-top: 2px;
+}
+
+.dark .text-note, .dark .placeholder, .dark [placeholder]:empty::before {
+  color: rgba(255,255,255,0.5);
+}
+
+.child {
+  position: relative; /* So that .thought can be sized at 100% and .thought .bullet-cursor-overlay bullet can be positioned correctly */
+  margin-left: -100px; /* must use margin-left not left so that content wrapping is not affected
+  margin-top: 0.501em; /* Match editable padding */
+  padding: 0.2em 0 0.2em 100px;
+}
+
+.child > .thought-container > .bullet {
+  transition: transform 0.1s ease-in-out;
+}
+
+/* In context view, make room for breadcrumbs. */
+.child.show-contexts > .thought-container .bullet {
+  position: relative;
+  top: 24px;
+}
+
+.child.show-contexts > .thought-container .bullet-cursor-overlay {
+  /** use transform to not interfere with existing margin-top calculation */
+  transform: translateY(24px);
+}
+
+.child > .thought-container > .bullet .glyph {
+  position: relative;
+  /*margin-right: 10px;    this causes the li to break at the beginning with longer text */
+  margin-left: -15px;
+  opacity: 0.8;
+  transition: opacity 0.75s ease-in-out;
+  margin-right: -5px; /* increase click area */
+  padding-right: 5px;
+}
+
+.mobile .child > .thought-container > .bullet .glyph {
+  margin-right: -8px;
+}
+
+.search-container > .bullet-search {
+  position: absolute;
+  margin-top: -2px;
+  margin-left: -12px;
+}
+
+.mobile .child > .thought-container > .bullet.show-contexts {
+  margin-right: -1.5px;
+}
+
+.mobile .child > .thought-container > .bullet.show-contexts .glyph {
+  font-size: 80%;
+  left: -0.08em;
+  top: 0.05em;
+}
+
+.child.expanded:not(.leaf) > .thought-container > .bullet,
+.child.editing:not(.leaf) > .thought-container > .bullet,
+.child.cursor-parent:not(.leaf) > .thought-container > .bullet,
+.child.cursor-grandparent:not(.leaf) > .thought-container > .bullet {
+  display: inline-block;
+  margin-right: -7px; /* compensate for inline-block */
+  transform: rotate(90deg);
+  transform-origin: -11px 9px;
+}
+
+.mobile .child.expanded:not(.leaf) > .thought-container > .bullet,
+.mobile .child.editing:not(.leaf) > .thought-container > .bullet,
+.mobile .child.cursor-parent:not(.leaf) > .thought-container > .bullet,
+.mobile .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet {
+  margin-right: -9px;
+}
+
+.mobile .child.expanded:not(.leaf) > .thought-container > .bullet .glyph,
+.mobile .child.editing:not(.leaf) > .thought-container > .bullet .glyph,
+.mobile .child.cursor-parent:not(.leaf) > .thought-container > .bullet .glyph,
+.mobile .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet .glyph {
+  left: 0.06em;
+}
+
+.mobile .child.expanded:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.mobile .child.editing:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.mobile .child.cursor-parent:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.mobile .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet.show-contexts .glyph {
+  left: -0.02em;
+}
+
+.child.leaf > .thought-container > .bullet .glyph {
+  left: -.02em;
+}
+
+.mobile .child.leaf > .thought-container > .bullet .glyph {
+  left: -0.05em;
+  top: 0.03em;
+  margin-right: -6.5px;
+}
+
+.child.leaf > .thought-container > .bullet.show-contexts .glyph {
+  font-size: 90%;
+  top: -0.05em;
+}
+
+.mobile .child.leaf > .thought-container > .bullet.show-contexts .glyph {
+  top: 0;
+  left: -0.30em;
+  margin-right: calc(-0.48em - 5px); /* offset from .child > .thought-container > .bullet .glyph margin-right */
+}
+
+.archive-check{
+  margin-left: -12px;
+  margin-top: 5px;
+}
+
+.archive-check label{
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* Android Section */
+
+ /*### Phone Portrait ### */
+
+@media (max-width: 500px) {
+.android .child {
+  position: relative; /* So that .thought can be sized at 100% and .thought .bullet-cursor-overlay bullet can be positioned correctly */
+  margin-left: -100px; /* must use margin-left not left so that content wrapping is not affected
+  margin-top: 0.501em; /* Match editable padding */
+  padding: 0.2em 0 0.2em 100px;
+}
+
+.android .child > .thought-container > .bullet {
+  transition: transform 0.1s ease-in-out;
+  margin-left: -3px;
+}
+
+ .android .child.leaf > .thought-container > .bullet .glyph {
+  left: 1.7px;
+  top: -7px;
+  font-size: 26px;
+}
+
+ .android .child > .thought-container > .bullet .glyph {
+  position: relative;
+  margin-left: -16.8px;
+  opacity: 0.8;
+  transition: opacity 0.75s ease-in-out;
+  margin-right: -5px; /* increase click area */
+  padding-right: 10.1px;
+  left: 3px;
+  font-size: 16px;
+  top: -1px;
+}
+
+/* Contexted Styles */
+.android .child > .thought-container > .bullet.show-contexts .glyph {
+  font-size: 149%;
+  left: 2px;
+  top: -5.1px;
+}
+
+.android .child.leaf > .thought-container > .bullet.show-contexts .glyph {
+  position: relative;
+  font-size: 160%;
+  left: 1px;
+  top: -8.1px;
+  margin-right: -5px;
+  padding-right: 10px;
+}
+
+.android .child.expanded:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.android .child.editing:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.android .child.cursor-parent:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.android .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet.show-contexts .glyph {
+  left: 2px;
+  font-size: 20px;
+  top: -2.5px;
+}
+
+.android .expanded:not(.leaf) > .thought-container > .bullet,
+.android .editing:not(.leaf) > .thought-container > .bullet,
+.android .cursor-parent:not(.leaf) > .thought-container > .bullet,
+.android .cursor-grandparent:not(.leaf) > .thought-container > .bullet {
+  display: inline-block;
+  margin-right: -1px; /* compensate for inline-block */
+  transform: rotate(90deg);
+  transform-origin: -11px 9px;
+}
+
+.android .child.expanded:not(.leaf) > .thought-container > .bullet .glyph,
+.android .child.editing:not(.leaf) > .thought-container > .bullet .glyph,
+.android .child.cursor-parent:not(.leaf) > .thought-container > .bullet .glyph,
+.android .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet .glyph {
+  left: 2px;
+  top: -1.6px;
+  font-size: 19px;
+}
+
+.android .thought .bullet-cursor-overlay {
+  display: none;
+}
+.android .child.editing > .thought-container > .thought .bullet-cursor-overlay,
+.android .child > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  display: inline;
+  position: absolute;
+  opacity: 0.2;
+  pointer-events: none; /* prevent overlay bullet from overlapping with the element above it. Cannot be fixed with height, width, or line-height */
+  margin-left: 111px; /* match drop-hover */
+  margin-top: -2px;
+  font-size: 67px;
+}
+
+/* overlay bullet for drag */
+/* specificity to beat ".dark .child.editing > .thought .bullet-cursor-overlay" */
+.android .child.child.child > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  color: lightblue;
+  opacity: 1;
+}
+
+/* Our Awesome first child (overlay) independent with its own properties */
+.android .child.editing:first-of-type > .thought-container > .thought .bullet-cursor-overlay,
+.android .child:first-of-type > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  margin-top: 8.11px;
+  left: -37px;
+  top: -34px;
+  font-size: 70px;
+}
+
+.android .child.show-contexts.editing:first-of-type > .thought-container > .thought .bullet-cursor-overlay,
+.android .child.show-contexts:first-of-type > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  margin-top: calc(0.18em - 4px); /* */
+}
+
+.android .child.editing > .thought-container > .thought .bullet-cursor-overlay {
+  top: -21.6px;
+  left: -24.5px;
+}
+.android .children-new .child > .thought-container > .bullet .glyph {
+  content: '+';
+  left: -0.15em;
+  top: -0.05em;
+  margin-right: -0.3em;
+}
+
+.android .children-new .child > .thought-container > .bullet .glyph {
+  left: 0.05em;
+  top: -0.1em;
+  margin-right: -0.1em;
+}
+
+.android .thought,
+.android .thought-annotation {
+  margin-top: -0.1px;
+  margin-left: 0.50em;
+}
+.android .children-subheading {
+  position: relative;
+  margin-top: -8px;
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+ }
+.android .child {
+  position: relative; /* So that .thought can be sized at 100% and .thought .bullet-cursor-overlay bullet can be positioned correctly */
+  margin-left: -100px; /* must use margin-left not left so that content wrapping is not affected
+  margin-top: 0.501em; /* Match editable padding */
+  padding: 1px 0 0.2px 100px;
+}
+.android .children .thought > .editable,
+.children .thought-annotation > .editable {
+  margin-bottom: 6px;
+}
+
+.android .thought, .android .thought-annotation {
+  margin-top: -2.1px;
+  margin-left: 0.50em;
+}
+}
+
+ /* Tablet Properties */
+
+ @media (min-width: 560px) and (max-width: 1024px)  {
+
+ .android .child > .thought-container > .bullet {
+  transition: transform 0.1s ease-in-out;
+  margin-left: -3px;
+}
+
+ .android .child.leaf > .thought-container > .bullet .glyph {
+  left: 1.7px;
+  top: -1px;
+  font-size: 19px;
+}
+
+ .android .child > .thought-container > .bullet .glyph {
+  position: relative;
+  margin-left: -16.8px;
+  opacity: 0.8;
+  transition: opacity 0.75s ease-in-out;
+  margin-right: -5px; /* increase click area */
+  padding-right: 10.1px;
+  left: 4px;
+  font-size: 28px;
+  top: -9px;
+}
+
+/* Contexted Styles */
+.android .child > .thought-container > .bullet.show-contexts .glyph {
+  font-size: 149%;
+  left: 2px;
+  top: -5.1px;
+}
+
+ .android .child.leaf > .thought-container > .bullet.show-contexts .glyph {
+  position: relative;
+  font-size: 171%;
+  left: 2px;
+  top: -7.1px;
+  margin-right: -5px;
+  padding-right: 10px;
+}
+
+.android .child.expanded:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.android .child.editing:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.android .child.cursor-parent:not(.leaf) > .thought-container > .bullet.show-contexts .glyph,
+.android .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet.show-contexts .glyph {
+  left: 3px;
+  top: -5.1px;
+}
+
+.android .expanded:not(.leaf) > .thought-container > .bullet,
+.android .editing:not(.leaf) > .thought-container > .bullet,
+.android .cursor-parent:not(.leaf) > .thought-container > .bullet,
+.android .cursor-grandparent:not(.leaf) > .thought-container > .bullet {
+  display: inline-block;
+  margin-right: -1px; /* compensate for inline-block */
+  transform: rotate(90deg);
+  transform-origin: -11px 9px;
+}
+
+.android .child.expanded:not(.leaf) > .thought-container > .bullet .glyph,
+.android .child.editing:not(.leaf) > .thought-container > .bullet .glyph,
+.android .child.cursor-parent:not(.leaf) > .thought-container > .bullet .glyph,
+.android .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet .glyph {
+  left: 2px;
+  top: -9.5px;
+}
+
+.android .thought .bullet-cursor-overlay {
+  display: none;
+}
+.android .child.editing > .thought-container > .thought .bullet-cursor-overlay,
+.android .child > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  display: inline;
+  position: absolute;
+  top: -0.38em;
+  left: -0.52em;
+  font-size: 295%;
+  opacity: 0.2;
+  pointer-events: none; /* prevent overlay bullet from overlapping with the element above it. Cannot be fixed with height, width, or line-height */
+  margin-left: 100px; /* match drop-hover */
+  margin-top: 0.08em;
+}
+
+/* overlay bullet for drag */
+/* specificity to beat ".dark .child.editing > .thought-container > .thought .bullet-cursor-overlay" */
+.android .child.child.child > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  color: lightblue;
+  opacity: 1;
+}
+
+/* Our Awesome first child (overlay) independent with its own properties */
+.android .child.editing:first-of-type > .thought-container > .thought .bullet-cursor-overlay,
+.android .child:first-of-type > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  margin-top: 9.11px;
+  left: -25px;
+  top: -20px;
+  font-size: 46px;
+}
+
+.android .child.show-contexts.editing:first-of-type > .thought-container > .thought .bullet-cursor-overlay,
+.android .child.show-contexts:first-of-type > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  margin-top: calc(0.18em - 4px); /* */
+}
+
+.android .child.editing > .thought-container > .thought .bullet-cursor-overlay {
+  top: -21.6px;
+  left: -24.5px;
+}
+.android .children-new .child > .thought-container > .bullet .glyph {
+  content: '+';
+  left: -0.15em;
+  top: -0.05em;
+  margin-right: -0.3em;
+}
+
+.android .children-new .child > .thought-container > .bullet .glyph {
+  left: 0.05em;
+  top: -0.1em;
+  margin-right: -0.1em;
+}
+.android .thought,
+.android .thought-annotation {
+  margin-top: -0.1px;
+  margin-left: 0.50em;
+}
+.android .children-subheading {
+  position: relative;
+  margin-top: -8px;
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+ }
+.android .child {
+  position: relative; /* So that .thought can be sized at 100% and .thought .bullet-cursor-overlay bullet can be positioned correctly */
+  margin-left: -100px; /* must use margin-left not left so that content wrapping is not affected
+  margin-top: 0.501em; /* Match editable padding */
+  padding: 1px 0 0.2px 100px;
+}
+.android .children .thought > .editable,
+.children .thought-annotation > .editable {
+  margin-bottom: 6px;
+}
+}
+
+/*.context-chain > .child > .thought-container > .bullet .glyph {
+  font-size: 10px;
+  content: '◀';
+  top: -0.1em;
+  left: -0.1em;
+  margin-right: -0.30em;
+}
+
+.mobile .context-chain > .child > .thought-container > .bullet .glyph {
+  font-size: 14px;
+  content: '◄';
+  margin-left: -16px;
+  margin-right: -0.15em;
+}
+
+.context-chain > .child.leaf::before {
+  font-size: 12px;
+  content: '◁';
+  top: -0.05em;
+  margin-right: -0.25em;
+}
+
+.mobile .context-chain > .child.leaf::before {
+  content: '◅';
+  margin-right: 0.05em;
+  margin-left: -17px;
+  top: -0.15em;
+}
+*/
+
+/* overlay bullet for cursor */
+
+.thought .bullet-cursor-overlay {
+  display: none;
+}
+
+.child.editing > .thought-container > .thought .bullet-cursor-overlay,
+.child > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  display: inline;
+  position: absolute;
+  top: -0.38em;
+  left: -0.52em;
+  font-size: 280%;
+  opacity: 0.2;
+  pointer-events: none; /* prevent overlay bullet from overlapping with the element above it. Cannot be fixed with height, width, or line-height */
+  margin-left: 100px; /* match drop-hover */
+  margin-top: 0.08em;
+}
+
+/* overlay bullet for drag */
+/* specificity to beat ".dark .child.editing > .thought-container > .thought .bullet-cursor-overlay" */
+.child.child.child > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  color: lightblue;
+  opacity: 1;
+}
+
+.child.editing:first-of-type > .thought-container > .thought .bullet-cursor-overlay,
+.child:first-of-type > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  margin-top: 0.18em;
+}
+
+.child.show-contexts.editing:first-of-type > .thought-container > .thought .bullet-cursor-overlay,
+.child.show-contexts:first-of-type > .thought-container > .thought .bullet-cursor-overlay.bullet-cursor-overlay-highlighted {
+  margin-top: calc(0.18em - 4px); /* */
+}
+
+.mobile .child.editing > .thought-container > .thought .bullet-cursor-overlay {
+  top: -0.41em;
+  left: -0.54em;
+}
+
+.dark .child.editing > .thought-container > .thought .bullet-cursor-overlay {
+  opacity: 0.25;
+}
+
+.children-new .child > .thought-container > .bullet .glyph {
+  content: '+';
+  left: -0.15em;
+  top: -0.05em;
+  margin-right: -0.3em;
+}
+
+.mobile .children-new .child > .thought-container > .bullet .glyph {
+  left: 0.05em;
+  top: -0.1em;
+  margin-right: -0.1em;
+}
+
+/* autofocus */
+/* NOTE: distance-from-cursor-2 > .child:not(.editing) is for =focus/Zoom; */
+
+.distance-from-cursor-2,
+.distance-from-cursor-2 a,
+.distance-from-cursor-3,
+.distance-from-cursor-3 a,
+.children-new.distance-from-cursor-1 a,
+.children-new.distance-from-cursor-2 a,
+.children-new.distance-from-cursor-3 a {
+  cursor: default;
+}
+
+.distance-from-cursor-0,
+.distance-from-cursor-1,
+.distance-from-cursor-2 > .child:not(.editing).cursor-parent {
+  cursor: auto;
+}
+
+.distance-from-cursor-0 a,
+.distance-from-cursor-1 a,
+.distance-from-cursor-2 > .child:not(.editing).cursor-parent a {
+  cursor: pointer;
+}
+
+.distance-from-cursor-2 > .child:not(.editing):not(.cursor-parent) > .thought-container > .bullet .glyph,
+.distance-from-cursor-3 > .child:not(.cursor-parent) > .thought-container > .bullet .glyph {
+  opacity: 0;
+  pointer-events: none; /* prevent hidden bullets from being "selected", causing the focus to be lost and a subsequent tab to select a hidden thought */
+}
+
+/* child */
+.distance-from-cursor-0 > .child { color: rgba(0,0,0,1); }
+.distance-from-cursor-1 > .child { color: rgba(0,0,0,0.5); }
+.distance-from-cursor-1 > .child.editing { color: rgba(0,0,0,1); }
+.distance-from-cursor-1 > .child.cursor-parent { color: rgba(0,0,0,1); }
+.distance-from-cursor-2 > .child:not(.editing) { color: rgba(0,0,0,0); }
+.distance-from-cursor-2 > .child:not(.editing).cursor-parent { color: rgba(0,0,0,0.5); }
+.distance-from-cursor-3 > .child { color: rgba(0,0,0,0); }
+
+/* sibling of cursor in =focus Zoom */
+.distance-from-cursor-2.zoomCursor > .child:not(.editing).cursor-parent > .thought-container { color: rgba(0,0,0,0); }
+.distance-from-cursor-2.zoomParent > .child:not(.editing).cursor-grandparent > .thought-container { color: rgba(0,0,0,0); }
+.distance-from-cursor-2.zoomCursor > .child:not(.editing) > .thought-container > .note { color: rgba(0,0,0,0); }
+.dark .distance-from-cursor-2.zoomCursor > .child:not(.editing).cursor-parent > .thought-container > .note { color: rgba(0,0,0,0); }
+
+/* =focus Zoom in table column 1 */
+/* hide nieces when cursor is in column 1 */
+.distance-from-cursor-1.zoomCursor > .child:not(.editing) > .thought-container { color: rgba(0,0,0,0); }
+/* hide cousins when cursor is in column 2 */
+.table-view > .children > .child:not(.cursor-parent) > .distance-from-cursor-1.zoomParent > .child:not(.editing) { color: rgba(0,0,0,0); }
+/* hide children of cousins when cursor is in column 2 */
+.table-view > .children > .child > .children > .child:not(.cursor-parent) > .distance-from-cursor-1.zoomParent > .child:not(.editing) { color: rgba(0,0,0,0); }
+
+/* depth-bar */
+.distance-from-cursor-0 > .child > .thought-container > .thought .depth-bar { background-color: rgba(0,0,0,1); }
+.distance-from-cursor-1 > .child > .thought-container > .thought .depth-bar { background-color: rgba(0,0,0,0.5); }
+.distance-from-cursor-1 > .child.editing > .thought-container > .thought .depth-bar { background-color: rgba(0,0,0,1); }
+.distance-from-cursor-1 > .child.cursor-parent > .thought-container > .thought .depth-bar { background-color: rgba(0,0,0,1); }
+.distance-from-cursor-2 > .child:not(.editing) > .thought-container > .thought .depth-bar { background-color: rgba(0,0,0,0); }
+.distance-from-cursor-2 > .child:not(.editing).cursor-parent > .thought-container > .thought .depth-bar { background-color: rgba(0,0,0,0.5); }
+.distance-from-cursor-3 > .child > .thought-container > .thought .depth-bar { background-color: rgba(0,0,0,0); }
+
+/* note */
+.distance-from-cursor-0 > .child > .thought-container > .note { color: rgba(7,7,7,0.5); }
+.distance-from-cursor-1 > .child > .thought-container > .note { color: rgba(7,7,7,0.25); }
+.distance-from-cursor-1 > .child.editing > .thought-container > .note { color: rgba(7,7,7,0.5); }
+.distance-from-cursor-1 > .child.cursor-parent > .thought-container > .note { color: rgba(7,7,7,0.5); }
+.distance-from-cursor-2 > .child:not(.editing) > .thought-container > .note { color: rgba(0,0,0,0); }
+.distance-from-cursor-2 > .child:not(.editing).cursor-parent > .thought-container > .note { color: rgba(7,7,7,0.25); }
+.distance-from-cursor-3 > .child > .thought-container > .note { color: rgba(7,7,7,0); }
+
+/* function */
+.distance-from-cursor-0 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(230,230,230,1); }
+.distance-from-cursor-1 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(230,230,230,0.5); }
+.distance-from-cursor-1 > .function.editing > .thought-container > .thought-annotation > .subthought { background-color: rgba(230,230,230,1); }
+.distance-from-cursor-1 > .function.cursor-parent > .thought-container > .thought-annotation > .subthought { background-color: rgba(230,230,230,1); }
+.distance-from-cursor-2 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(230,230,230,0); }
+.distance-from-cursor-2 > .function.cursor-parent > .thought-container > .thought-annotation > .subthought { background-color: rgba(230,230,230,0.5); }
+.distance-from-cursor-3 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(230,230,230,0); }
+
+.dark .distance-from-cursor-0 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(50,50,50,1); }
+.dark .distance-from-cursor-1 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(50,50,50,0.5); }
+.dark .distance-from-cursor-1 > .function.editing > .thought-container > .thought-annotation > .subthought { background-color: rgba(50,50,50,1); }
+.dark .distance-from-cursor-1 > .function.cursor-parent > .thought-container > .thought-annotation > .subthought { background-color: rgba(50,50,50,1); }
+.dark .distance-from-cursor-2 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(50,50,50,0); }
+.dark .distance-from-cursor-2 > .function.cursor-parent > .thought-container > .thought-annotation > .subthought { background-color: rgba(50,50,50,0.5); }
+.dark .distance-from-cursor-3 > .function > .thought-container > .thought-annotation > .subthought { background-color: rgba(50,50,50,0); }
+
+/* divider */
+.divider {transition: opacity 0.2s ease-in-out; }
+.distance-from-cursor-1 > .child > .thought-container > .thought .divider { opacity: 0.5; }
+.distance-from-cursor-2 > .child:not(.editing) > .thought-container > .thought .divider { opacity: 0; }
+.distance-from-cursor-3 > .child > .thought-container > .thought .divider { opacity: 0; }
+
+/* external-link */
+.external-link {transition: opacity 0.2s ease-in-out; }
+.distance-from-cursor-1 > .child > .thought-container > .thought-annotation .external-link { opacity: 0.5; }
+.distance-from-cursor-2 > .child:not(.editing) > .thought-container > .thought-annotation .external-link { opacity: 0; }
+.distance-from-cursor-3 > .child > .thought-container > .thought-annotation .external-link { opacity: 0; }
+
+/* children-subheading */
+.children-subheading { transition: opacity 0.2s ease-in-out; }
+.distance-from-cursor-0 > .child > .children-subheading { opacity: 1; }
+.distance-from-cursor-1 > .child > .children-subheading { opacity: 0.5; }
+.distance-from-cursor-1 > .child.editing > .children-subheading { opacity: 1; }
+.distance-from-cursor-1 > .child.cursor-parent > .children-subheading { opacity: 1; }
+.distance-from-cursor-2 > .child:not(.editing) > .children-subheading { opacity: 0; }
+.distance-from-cursor-2 > .child:not(.editing).cursor-parent > .children-subheading { opacity: 0.5; }
+.distance-from-cursor-3 > .child > .children-subheading { opacity: 0; }
+
+/* home icon */
+.home { transition: opacity 0.75s ease-out; }
+.distance-from-cursor-2 > .child:not(.editing) > .thought-container > .thought .home { opacity: 0; }
+.distance-from-cursor-3 > .child > .thought-container > .thought .home { opacity: 0; }
+
+/* dark child */
+.dark .distance-from-cursor-0 > .child { color: rgba(255,255,255,1); }
+.dark .distance-from-cursor-1 > .child { color: rgba(255,255,255,0.5); }
+.dark .distance-from-cursor-1 > .child.editing { color: rgba(255,255,255,1); }
+.dark .distance-from-cursor-1 > .child.cursor-parent { color: rgba(255,255,255,1); }
+.dark .distance-from-cursor-2 > .child:not(.editing) { color: rgba(255,255,255,0); }
+.dark .distance-from-cursor-2 > .child:not(.editing).cursor-parent { color: rgba(255,255,255,0.5); }
+.dark .distance-from-cursor-3 > .child { color: rgba(255,255,255,0); }
+
+/* dark depth-bar */
+.dark .distance-from-cursor-0 > .child > .thought-container > .thought .depth-bar { background-color: rgba(255,255,255,1); }
+.dark .distance-from-cursor-1 > .child > .thought-container > .thought .depth-bar { background-color: rgba(255,255,255,0.5); }
+.dark .distance-from-cursor-1 > .child.editing > .thought-container > .thought .depth-bar { background-color: rgba(255,255,255,1); }
+.dark .distance-from-cursor-1 > .child.cursor-parent > .thought-container > .thought .depth-bar { background-color: rgba(255,255,255,1); }
+.dark .distance-from-cursor-2 > .child:not(.editing) > .thought-container > .thought .depth-bar { background-color: rgba(255,255,255,0); }
+.dark .distance-from-cursor-2 > .child:not(.editing).cursor-parent > .thought-container > .thought .depth-bar { background-color: rgba(255,255,255,0.5); }
+.dark .distance-from-cursor-3 > .child > .thought-container > .thought .depth-bar { background-color: rgba(255,255,255,0); }
+
+/* dark note */
+.dark .distance-from-cursor-0 > .child > .thought-container > .note { color: rgba(255,255,255,0.5); }
+.dark .distance-from-cursor-1 > .child > .thought-container > .note { color: rgba(255,255,255,0.25); }
+.dark .distance-from-cursor-1 > .child.editing > .thought-container > .note { color: rgba(255,255,255,0.5); }
+.dark .distance-from-cursor-1 > .child.cursor-parent > .thought-container > .note { color: rgba(255,255,255,0.5); }
+.dark .distance-from-cursor-2 > .child:not(.editing) > .thought-container > .note { color: rgba(255,255,255,0); }
+.dark .distance-from-cursor-2 > .child:not(.editing).cursor-parent > .thought-container > .note { color: rgba(255,255,255,0.25); }
+.dark .distance-from-cursor-3 > .child > .thought-container > .note { color: rgba(255,255,255,0); }
+
+/* shift thoughts over as cursor navigates deeper */
+.distance-from-cursor-2, .distance-from-cursor-3 {
+  transform: translate3d(-1.2em, 0, 0);
+}
+
+/*
+  At deeper depths, the available width becomes smaller and smaller. Due to the left-translate (above), the left edge will be kept relatively close to the left edge of the screen as one navigates deeper. However its bounding box is the same, so its width will still get smaller and smaller, although it will appear that it is getting compressed from the right. See: https://github.com/cybersemics/em/issues/752.
+
+  Offset this by adding a negative right margin.
+
+  This has the downside of causing multi-line text to reflow as one navigates deeper, as its bounding box is now dependent on its depth in the hierarchy. See: https://github.com/cybersemics/em/issues/251. Only apply this to .distance-from-cursor-3 instead of both 2 & 3 so that this side effect is less pronounced. Ultimately there is a natural tradeoff, and it's more important that the full width is preserved.
+*/
+.distance-from-cursor-3 {
+  margin-right: -1.2em;
+}
+
+/* new thought */
+.children-new { transition: all 0.75s ease-out; }
+.children-new.distance-from-cursor-1,
+.children-new.distance-from-cursor-2,
+.children-new.distance-from-cursor-3 {
+  opacity: 0;
+}
+
+/* overflow:hidden breaks sticky header */
+.container {
+  position: relative;
+}
+
+/* Footer styles - START */
+
+.footer {
+  padding: 20px;
+  margin: 0;
+  text-align: right;
+  font-size: 70%;
+  list-style: none;
+  background-color: #e4e4e4; /* 80% of #ddd */
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.dark .footer a {
+  color: skyblue;
+}
+
+.footer .support-link {
+  color: inherit;
+}
+
+.dark .footer {
+  background-color: #1a1a1a; /* 80% of #212121 */
+  color: white;
+}
+
+.dark .footer .support-link {
+  color: white;
+}
+
+.footer .support-link:hover {
+  text-decoration: underline;;
+}
+
+.footer-divider {
+  margin: 0 6px;
+}
+
+.increase-font { font-size: 1.5em; }
+
+.floatLeft { float: left; }
+/* .footer .floatLeft a { text-decoration: none; } may be better with underline*/
+
+/* Footer styles - END */
+
+/* for some reason opacity bleeds through modal*/
+.dim { color: rgba(7,7,7,0.5); }
+.dark .dim { color: rgba(255,255,255,0.5); }
+
+.modal {
+  background-color: white;
+  box-shadow: 2px 5px 5px rgba(0,0,0,0.5);
+  border: solid 1px rgba(0,0,0,0.2);
+  padding: 15px;
+  position: absolute;
+  display: inline-block;
+  line-height: 1.5;
+  width: calc(100% - 100px);
+  z-index: 10;
+  animation: fademostlyin 0.4s;
+  min-width: 200px;
+}
+
+.modal.opaque {
+  animation: fadein 0.4s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 0.99; }
+}
+
+@keyframes fademostlyin {
+  from { opacity: 0; }
+  to { opacity: 0.85; }
+}
+
+.modal p {
+  margin: 0 0 10px 0;
+}
+
+.modal.center {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.popup {
+  box-shadow: none;
+  border: none;
+  display: block;
+  width: 100%;
+  padding: 8%;
+  box-sizing: border-box;
+}
+
+.popup-close-x {
+  position: fixed;
+  top: 2px;
+  right: 7px;
+  font-size: 24px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.status-close-x {
+  font-size: 16px;
+  top: 0;
+  right: 0;
+  padding: 5px 0.5em 10px 10px; /* extra tap area */
+  color: inherit;
+  text-decoration: none;
+}
+
+.dark .modal a.popup-close-x {
+  color: inherit;
+}
+
+.popup .modal-content {
+  max-width: 40em;
+  margin: 0 auto;
+  max-height: none;
+}
+
+.popup .modal-title {
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.popup .modal-subtitle {
+  font-family: 'Helvetica Neue';
+  font-size: 22px;
+}
+
+.popup .modal-subtitle-compact {
+  margin-bottom: 15px;
+}
+
+
+.popup .modal-text {
+  margin-bottom: 50px;
+}
+
+.popup .modal-actions a {
+  font-size: 75%;
+}
+
+.popup .modal-actions a.button {
+  font-size: 18px;
+  text-decoration: none;
+  background-color: black;
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.popup-section {
+  margin-bottom: 50px;
+}
+
+.modal-welcome {
+  height: 100%;
+  font-size: 26px;
+}
+
+.modal-welcome .modal-title {
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.modal-welcome .modal-text {
+  margin-top: 2em;
+  margin-bottom: 2.5em;
+  font-size: 75%;
+}
+
+.modal-welcome .modal-actions a.button {
+  font-size: 92%; /* instead of px, so that it will be scaled with shrink-to-fit */
+}
+
+.dark .popup .modal-actions a.button {
+  color: black;
+  background-color: white;
+}
+
+.dark .popup .modal-actions a {
+  color: white;
+}
+
+.popup .modal-actions a.button-inactive {
+  background-color: #aaa;
+}
+
+.dark .popup .modal-actions .button-active {
+  background-color: lightblue;
+}
+
+
+.popup .modal-actions {
+  text-align: center;
+}
+
+.popup .logo {
+  width: 44px;
+  vertical-align: text-bottom;
+}
+
+.modal-title {
+  font-weight: 400;
+}
+
+.modal-text {
+  font-size: 85%;
+}
+
+.modal-actions {
+  font-size: 75%;
+}
+
+.modal-actions a {
+  font-weight: normal;
+  margin: 0 5px;
+  text-decoration: underline;
+  white-space: nowrap;
+  line-height: 2;
+}
+
+.dark .modal {
+  background-color: #333;
+  border: solid 1px rgba(255,255,255,0.1);
+}
+
+.dark .popup {
+  background-color: black;
+  border: none;
+}
+
+.dark .modal a {
+  color: lightblue;
+}
+
+.modal-home {
+  margin-left: 20px;
+  margin-top: -5px;
+}
+
+/* higher precendence than ".dark .modal .a" */
+.modal-close {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 12px;
+  vertical-align: middle;
+  text-align: center;
+  padding: 10px;
+}
+
+.popup .modal-close {
+  display: none;
+}
+
+.modal-close span {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+}
+
+.dark a.modal-close span {
+  color: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.animate { transition: all 0.4s ease-out; }
+.animate-slow { transition: all 1s ease-out; }
+.animate-fadeout { opacity: 0; }
+
+@keyframes pulse {
+  from { opacity: 0.25; }
+}
+
+.animate-pulse {
+    animation: pulse 1s infinite alternate;
+}
+
+/* arrow */
+.arrow:after, .arrow:before {
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.arrow:after { border-width: 10px; }
+.arrow:before { border-width: 12px; }
+
+/* arrow left */
+.arrow-left:after, .arrow-left:before {
+  right: 100%;
+  top: 50%;
+}
+
+.arrow-left:after {
+  border-right-color: white;
+  margin-top: -10px;
+}
+
+.arrow-left:before {
+  border-right-color: rgba(0,0,0,0.2);
+  margin-top: -12px;
+}
+
+.dark .arrow-left:after { border-right-color: #333; }
+.dark .arrow-left:before { border-right-color: rgba(255,255,255,0.15); }
+
+.arrow-lefttop:after, .arrow-lefttop:before { top: 20px; }
+.arrow-leftbottom:after, .arrow-leftbottom:before { bottom: 20px; }
+.arrow-leftmiddle:after, .arrow-leftmiddle:before { top: 50%; }
+
+/* arrow up */
+.arrow-up:after, .arrow-up:before {
+  bottom: 100%;
+  left: 50%;
+}
+
+.arrow-up:after {
+  border-bottom-color: white;
+  margin-left: -10px;
+}
+
+.arrow-up:before {
+  border-bottom-color: rgba(0,0,0,0.2);
+  margin-left: -12px;
+}
+
+.dark .arrow-up:after { border-bottom-color: #333; }
+.dark .arrow-up:before { border-bottom-color: rgba(255,255,255,0.15); }
+
+.arrow-upleft:before, .arrow-upleft:after { left: 10%; }
+
+.modal-icon {
+  display: inline-block;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  color: #666;
+  text-align: center;
+  animation: fadein 0.4s;
+}
+
+.modal-icon-inner {
+  font-family: "Times New Roman";
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border: solid 1px rgba(0,0,0,0.2);
+  border-radius: 99px;
+  color: black;
+  background-color: whitesmoke;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.dark .modal-icon-inner {
+  color: white;
+  background-color: black;
+  box-shadow: 0 0 20px white;
+}
+
+code, .code {
+  background-color: #ccc;
+  font-family: monospace;
+}
+
+.dark code {
+  background-color: #333;
+}
+
+.code-block {
+  display: block;
+  padding: 5px 10px;
+  margin: 2px 5px 10px;
+}
+
+.shortcuts {
+  font-size: 14px;
+  margin: 0 auto;
+}
+
+.shortcuts th {
+  padding-right: 1em;
+  text-align: left;
+  font-weight: normal;
+}
+
+.shortcuts td {
+  min-width: 10rem;
+}
+
+/* center gesture diagrams */
+.mobile .shortcuts td {
+  text-align: center;
+  min-width: auto;
+}
+
+.mobile.drag-in-progress * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.dragging {
+  color: lightblue;
+}
+
+/* the bar that displays on hover when moving thoughts */
+.drop-hover {
+  position: absolute;
+  width: calc(100% - 80px);
+  margin-top: -0.3em;
+  margin-left: -0.7em;
+  background-color: lightblue;
+  height: 3px;
+  border-radius: 99px;
+  z-index: 1;
+}
+
+.children .child:first-child > .drop-hover {
+  margin-top: -0.3em;
+}
+
+/* the drop target at the end of a context */
+.drop-end {
+  position: absolute;
+  width: calc(100% - 38px);
+  z-index: 1; /* Above "Add thought" */
+}
+
+/* for some reason the drop-end in the outermost ul is too wide */
+.drop-end.last {
+  width: calc(100% - 161px);
+}
+
+.child.drop-end::before {
+  display: none;
+}
+
+.drop-end .drop-hover {
+  /*background-color: purple;*/
+  margin-left: -1.25em;
+  width: calc(100% - 41px);
+}
+
+/* bump specificity */
+.empty-children .child.child > .drop-hover {
+  /*background-color: tomato;*/
+  margin-top: -0.6em;
+  width: calc(100% - 158px);
+}
+
+.empty-children .drop-end {
+  /*background-color: red;*/
+  z-index: 2; /* above normal .drop-hover */
+  margin-left: 30px;
+  padding-bottom: 1.1em;
+}
+
+.empty-children .drop-end.inside-divider {
+  margin-left: 60px;
+}
+
+.mobile .empty-children .drop-end {
+  margin-left: 25%;
+}
+
+.empty-children .drop-end > .drop-hover {
+  margin-left: -150px;
+}
+
+.mobile .empty-children .drop-end > .drop-hover {
+  margin-left: calc(-25% - 103px);
+}
+
+.status-button {
+  border: solid 1px black;
+  border-radius: 99px;
+  padding: 2px 7px;
+  font-size: 80%;
+  transition: opacity 0.75s ease-out;
+}
+
+.status-button:hover {
+  background-color: black;
+  color: white;
+}
+
+.dark .status-button {
+  border-color: white;
+}
+
+.dark .status-button:hover {
+  background-color: white;
+  color: black;
+}
+
+.status-button-fade {
+  opacity: 0;
+}
+
+.indent {
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 18px;
+}
+
+.search-children a.button {
+  /* TODO: Fix the markup rather than overriding the margin; */
+  margin: 10px 0 15px -25px;
+}
+
+.tutorial {
+  padding: 40px 20px 20px;
+  background-color: #ddd;
+  position: relative;
+  z-index: 3;
+}
+
+.dark .tutorial {
+  background-color: #212121;
+  color: white;
+}
+
+.tutorial-inner {
+  max-width: 32em;
+  margin: 0 auto;
+}
+
+.tutorial p {
+  margin-top: 20px;
+}
+
+.tutorial p:first-child {
+  margin-top: 0;
+}
+
+.tutorial-skip {
+  color: #666;
+  top: 10px;
+  right: 15px;
+}
+
+.tutorial-next-wait {
+  margin-left: 10px;
+  font-style: italic;
+}
+
+.tutorial .button {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.tutorial-step-bullets {
+  margin-bottom: 10px;
+}
+
+.tutorial-step-bullet {
+  color: inherit;
+  text-decoration: none;
+  font-size: 32px;
+}
+
+.tutorial-step-bullets .tutorial-step-bullet {
+  opacity: 0.25;
+  margin-left: 1px;
+  margin-right: 1px;
+  transition: all 400ms ease-in-out;
+}
+
+.tutorial-step-bullets .tutorial-step-bullet.active {
+  opacity: 1;
+}
+
+.tutorial-trace-gesture {
+  position: absolute;
+  margin-top: 50px;
+  z-index: 10; /* above .children .children */
+  text-align: center;
+  left: 0;
+  right: 0;
+  background-color: rgba(255,255,255,0.8);
+  padding-bottom: 50px;
+}
+
+.dark .tutorial-trace-gesture {
+  background-color: rgba(0,0,0,0.8);
+}
+
+.tutorial li {
+  list-style: disc;
+  line-height: 1.5;
+}
+
+.simple-list li {
+  list-style: none;
+  width: 240px;
+  margin: 0 auto 0.5em;
+}
+
+.simple-list a {
+  display: block;
+}
+
+/* Prose View */
+
+/* prose view transition added to existing .children ruleset */
+
+.children > .child > * > * > .superscript-container,
+.children > .child > * > * > .editable {
+  transition: text-indent 0.4s ease-in-out,
+    padding 0.4s ease-in-out,
+    line-height 0.4s ease-in-out;
+}
+
+.children > .child > .thought-container > .bullet {
+  transition:
+    transform 0.1s ease-in-out,
+    text-indent 0.4s ease-in-out,
+    left 0.4s ease-in-out,
+    top 0.4s ease-in-out,
+    opacity 0.4s ease-in-out;
+
+  /* necessary for transition start */
+  left: 0;
+}
+
+
+.children > .child > * > .thought-container > .bullet-cursor-overlay {
+  transition:
+    text-indent 0.4s ease-in-out,
+    opacity 0.4s ease-in-out;
+}
+
+.prose > .children {
+  margin-left: -5px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.prose > .children > .child > .thought-container > .thought-annotation > .superscript-container {
+  text-indent: 1.7em;
+  top: -2px;
+  position: relative;
+}
+
+.prose > .children > .child > .thought-container > .thought > .editable {
+  text-indent: 1.7em;
+  padding-top: 0;
+  padding-bottom: 0.2em;
+  line-height: 1.5;
+}
+
+.prose > .children > .child > .thought-container > .bullet {
+  position: relative;
+  left: 27px;
+  top: -2px;
+  opacity: 0.5;
+}
+
+.prose > .children > .child.leaf > .thought-container > .bullet {
+  opacity: 0;
+}
+
+.prose > .children > .child > .thought-container > .thought > .thought-container > .bullet-cursor-overlay {
+  opacity: 0;
+}
+
+.prose > .children > .child > .children {
+  margin-left: 3.5em;
+  margin-bottom: 10px;
+}
+.Resizer {
+  background: #fff;
+  opacity: 0.2;
+  z-index: 2;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+}
+
+.Resizer:hover {
+  -webkit-transition: all 2s ease;
+  transition: all 2s ease;
+}
+
+.Resizer.horizontal {
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid rgba(255, 255, 255, 0);
+  cursor: row-resize;
+  width: 100%;
+}
+
+.Resizer.horizontal:hover {
+  border-top: 5px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+}
+
+.Resizer.vertical {
+  width: 11px;
+  margin: 0 -5px;
+  border-left: 5px solid rgba(255, 255, 255, 0);
+  border-right: 5px solid rgba(255, 255, 255, 0);
+  cursor: col-resize;
+}
+
+.Resizer.vertical:hover {
+  border-left: 5px solid rgba(255, 255, 255, 0.5);
+  border-right: 5px solid rgba(255, 255, 255, 0.5);
+}
+.Resizer.disabled {
+  cursor: not-allowed;
+}
+.Resizer.disabled:hover {
+  border-color: transparent;
+}
+.SplitPane.animating .Pane {
+  transition: width .4s ease;
+}
+
+/* material drawer container css override */
+.drawer-container-mobile {
+  max-width: 90%;
+}
+
+.drawer-container-desktop {
+  max-width: 90%;
+}
+
+/* hamburger menu div */
+
+.hamburger-menu > div > span {
+  background: black;
+}
+
+.dark .hamburger-menu > div > span {
+  background: white;
+}
+
+.ellipsized-path {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recently-edited-sidebar {
+  background: #f5f5f5;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  color: black;
+  scrollbar-width: thin; /*for firefox*/
+  line-height: 1.8;
+}
+
+.dark .recently-edited-sidebar {
+  color: white;
+  background: #292A2B;
+  color: white;
+}
+
+.dark .recently-edited-sidebar {
+  background: #292A2B;
+}
+
+.recently-edited-sidebar::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+  display: none;
+}
+
+.recently-edited-sidebar .header {
+  color: #666;
+  font-weight: 300;
+  display: flex;
+  justify-content: center;
+  margin: 1em;
+}
+
+.thoughts-tab {
+  transition: all 0.4s linear;
+}
+
+.thoughts-tab::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+  display: none;
+}
+
+.thoughts-tab:hover {
+  opacity:1;
+}
+
+.icon {
+  cursor: pointer;
+  flex:1;
+  transition: all 0.2s ease-in-out;
+}
+
+.icon-text {
+  flex: 8;
+  font-size: 12px;
+}
+
+.divider-container {
+  margin-top: 5px;
+}
+
+.editing > .thought-container > .thought > .divider-container > .divider {
+  border-color: rgb(204, 204, 204);
+}
+
+.child-divider {
+  margin-left: -125px;
+}
+
+.child-divider .drop-hover {
+  margin-left: 6px;
+}
+
+.inside-divider .drop-hover {
+  margin-left: 6px;
+}
+
+.child-divider .bullet,
+.child-divider .bullet-cursor-overlay
+{
+  display: none !important;
+}
+
+.divider {
+  border: solid 1px gray;
+}
+
+.dark .divider {
+  border-color: #333;
+}
+
+.gesture-container svg {
+  position: relative;
+  top:10px;
+}
+
+/* Table View */
+
+.table-view > .children {
+  margin: 10px 0 0 -5px;
+}
+
+/* row */
+.table-view > .children > .child {
+  display: table-row;
+  /* margin and padding do not work on table-row. Must apply to each cell. */
+}
+
+.table-view > .children > .child > .thought-container > .bullet {
+  display: none;
+}
+
+/* column 1 */
+.table-view > .children > .child > .thought-container {
+  display: table-cell;
+  text-align: right;
+  position: relative; /* used to constrain .drop-hover width */
+  padding-bottom: 10px; /* padding must go on column 1 cell since it may be a leaf */
+}
+
+.table-view > .children > .child > .thought-container > .thought > .editable,
+.table-view > .children > .child > .thought-container > .thought-annotation > .subthought {
+  word-break: normal;
+}
+
+@media screen and (min-width: 600px) {
+  .table-view > .children > .child > .thought-container > .thought,
+  .table-view > .children > .child > .thought-container > .thought-annotation {
+    margin-right: 1rem;
+  }
+}
+
+/* cursor can still be seen since are dimmed due to autofocus */
+.table-view > .children > .child > .thought-container > .thought > .bullet-cursor-overlay {
+  display: none;
+}
+
+.table-view > .children > .child.editing > .thought-container > .thought > .editable:before {
+  position: absolute;
+  margin-left: -18px;
+  color: #838283;
+  content: "▸";
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+/* leaf */
+.table-view > .children > .child.editing.leaf > .thought-container > .thought > .editable:before {
+  content: "•";
+}
+
+.mobile .table-view > .children > .child.editing > .thought-container > .thought > .editable:before {
+  margin-top: -1px;
+}
+
+.table-view > .children > .child > .thought-container > .thought,
+.table-view > .children > .child > .thought-container > .thought-annotation {
+  width: auto;
+  display: inline-block;
+  min-width: 13vw;
+  margin-left: 0;
+  padding: 3px 0;
+}
+
+.table-view > .children > .child > .thought-container > .thought > .bullet-cursor-overlay {
+  top: -15px;
+  left: 4px;
+  margin-left: 0;
+}
+
+/* column 2 */
+.table-view > .children > .child > .children {
+  display: table-cell;
+  vertical-align: top;
+  width: 100%;
+  padding-bottom: 15px;
+}
+
+/* nested table */
+.table-view > .children > .table-view > .children {
+  padding-top: 40px; /* TODO: Calculate dynamically based on column 1 cell height */
+  left: -60px; /* TODO: Calculate dynamically based on column 1 width */
+}
+
+/* nested tables require additional padding-top since they are otherwise interperted as column 2 of the outer table */
+.table-view > .children > .child.table-view:first-child > .children {
+  padding-top: 20px;
+}
+
+.table-view > .children > .child > .children > .child {
+  width: 100%;
+  padding-top: 3px;
+  padding-left: 40px;
+  margin-left: 0;
+}
+
+.table-view > .children > .child > .children > .child > .thought-container > .thought > .bullet-cursor-overlay {
+  left: 18px;
+  margin-left: 0;
+}
+
+/* overlay bullet of first child in second column needs to compensate for top */
+.table-view > .children > .child > .children > .child:first-child > .thought-container > .thought > .bullet-cursor-overlay {
+  top: -20px;
+}
+
+.mobile .table-view > .children > .child > .children > .child:first-child > .thought-container > .thought > .bullet-cursor-overlay {
+  top: -21px;
+}
+
+/* pre-thought .drop-hover of column 1 */
+.table-view > .children > .child > .thought-container > .drop-hover {
+  /*background-color: pink;*/
+  margin-left: 0;
+  margin-top: -1px; /* evenly between rows */
+  width: calc(100% + 10px); /* slightly overextended to increase click area of column 1 */
+}
+
+/* post-thought .drop-hover of empty column 2 */
+.table-view > .children > .drop-end > .drop-hover {
+  /*background-color: orange;*/
+  margin-top: -15px;
+  margin-left: 0;
+  width: 33%;
+}
+
+/* pre-thought .drop-hover of column 2 */
+.table-view > .children > .child > .children > .child > .thought-container > .drop-hover {
+  /*background-color: turquoise;*/
+  margin-top: 0;
+  margin-left: -11px;
+}
+
+/* post-thought .drop-hover of column 2 */
+.table-view > .children > .child > .children > .drop-end .drop-hover {
+  /*background-color: seagreen;*/
+  margin-top: -2px;
+  width: calc(100% - 100px);
+}
+
+/* post-thought .drop-hover of empty column 2 */
+.table-view > .children > .child > .empty-children {
+  position: relative; /* constraints width of .drop-hover */
+}
+.table-view > .children > .child > .empty-children .drop-end > .drop-hover {
+  /*background-color: lightgreen;*/
+  margin-top: 5px;
+  margin-left: -97px;
+  width: calc(100% - 104px);
+}
+
+.table-view > .children > .child > .empty-children .drop-end {
+  margin-left: 0;
+}
+
+.table-view > .children > .child:first-child > .thought-container > .drop-hover {
+  margin-top: 10px;
+}
+
+.search-container {
+  display: flex;
+}
+
+.search-container > .thought {
+  flex: 1;
+  display: flex;
+}
+
+.external-link {
+  margin-left: 3px;
+}
+
+.function > .thought-container > .thought > .editable {
+  font-family: monospace;
+}
+
+.function > .thought-container > .thought-annotation > .subthought {
+  background-color: #ddd;
+  font-family: monospace;
+}
+
+.dark .function > .thought-container > .thought-annotation > .subthought {
+  background-color: #222;
+}
+
+.modal-export-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.modal-drop-down-holder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative; /* for .drop-down-wrapper absolute positioning */
+}
+
+.modal-btn-export {
+  font-family: Helvetica;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  padding: 2px 30px;
+  min-width: 90px;
+  display: inline-block;
+  border-radius: 99px;
+  font-weight: normal;
+  margin: 0 5px 15px 5px;
+  white-space: nowrap;
+  line-height: 2;
+  font-size: 18px;
+  text-decoration: none;
+  border: none;
+}
+
+.modal-export-btns-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-btn-cancel {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.modal-export-publish {
+  border-top: solid 1px #ccc;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.dark .modal-export-publish {
+  border-top-color: #444;
+}
+
+.cp-clipboard-wrapper{
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.drop-down-wrapper {
+  background-color: white;
+  box-shadow: 0 0 10px 0px black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 1px solid white;
+  position: absolute;
+  right: 3px;
+  padding: 0px 5px;
+}
+
+.drop-down-wrapper .drop-down-option-wrapper {
+  cursor: pointer;
+  padding: 2px 0px;
+  border-top: 1px solid #444;
+  transition: opacity 150ms ease-in;
+}
+
+.drop-down-wrapper .drop-down-option-wrapper:hover {
+  opacity: 0.85;
+}
+
+.drop-down-wrapper .drop-down-option-wrapper:first-child {
+  border-top: none;
+}
+
+.drop-down-wrapper .drop-down-option {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.drop-down-wrapper .drop-down-option .drop-down-label  {
+  margin-left: 10px;
+  width: 95px;
+}
+
+.dark .drop-down-wrapper {
+  background-color: black;
+}
+
+.invalid-option {
+  color: tomato !important;
+}
+
+.note {
+  margin-top: 0;
+  margin-bottom: 0;
+  transition: color 0.75s ease-in-out;
+}
+
+/* Publish */
+
+.publish > .children > .child {
+  font-family: Lora, Georgia, Times New Roman;
+  left: -1.5em; /* offset parent (ul.children) margin-left */
+}
+
+.publish > .children > .child > .thought-container {
+  font-size: 28px;
+}
+
+/* title */
+.publish > .children > .child > .thought-container > .thought,
+.publish > .children > .child > .thought-container > .thought-annotation {
+  margin-left: 0;
+}
+
+/* subthoughts */
+.publish > .children > .child > .children > .child:not(.leaf) {
+  margin-left: -75px;
+}
+
+.publish > .children > .child > .children > .child.leaf {
+  margin-bottom: 1em;
+  margin-top: 1em;
+  line-height: 1.8;
+}
+
+.publish > .children > .child > .children > .child.leaf > .thought-container > .thought,
+.publish > .children > .child > .children > .child.leaf > .thought-container > .thought-annotation {
+  margin-left: 0;
+}
+
+.publish > .children > .child > .children {
+  margin-left: 0;
+}
+
+.publish-meta {
+  margin: 15px 0;
+  font-size: 85%;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.publish-meta .react-gravatar {
+  margin: 10px 10px 10px 0;
+  border-radius: 9999px;
+  float: left;
+}
+
+.publish-meta .byline:first-of-type {
+  margin-top: 15px;
+}
+
+.publish-meta .byline:nth-of-type(2) {
+  opacity: 0.6;
+}
+
+/* overlay bullet */
+.publish > .children > .child .child.editing > .thought-container > .thought .bullet-cursor-overlay,
+.publish > .children > .child .child.dragging > .thought-container > .thought .bullet-cursor-overlay {
+  left: -0.48em;
+}
+
+/* overlay bullet table view column 2 */
+.publish > .children > .child.table-view > .children > .child > .children > .child.editing > .thought-container > .thought .bullet-cursor-overlay,
+.publish > .children > .child.table-view > .children > .child > .children > .child.dragging > .thought-container > .thought .bullet-cursor-overlay {
+  left: 20px;
+}
+
+/* overlay bullet table view column 2 leaf */
+.publish > .children > .child.table-view > .children > .child > .children > .child.leaf.editing > .thought-container > .thought .bullet-cursor-overlay,
+.publish > .children > .child.table-view > .children > .child > .children > .child.leaf.dragging > .thought-container > .thought .bullet-cursor-overlay {
+  left: 19px;
+}
+
+.quick-add-button {
+  display: inline-flex;
+  transition: transform 200ms ease-in-out;
+}
+
+.quick-add-button.rotate {
+  transform: rotate(135deg);
+}
+
+@keyframes ellipsis {
+  to { width: 1.25em; }
+}
+
+.loading-ellipsis:after {
+  overflow: hidden;
+  position: absolute;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4,end) 1000ms infinite;
+  animation: ellipsis steps(4,end) 1000ms infinite;
+  content: '\2026'; /* ascii code for the ellipsis character */
+  width: 0;
+  margin-left: 0.1em;
+}
+
+@keyframes toblack {
+  to { color: black; }
+}
+
+@keyframes towhite {
+  to { color: white; }
+}
+
+.graypulse {
+  color: #666;
+  -webkit-animation: toblack 400ms infinite alternate ease-in-out;
+}
+
+.dark .graypulse {
+  -webkit-animation: towhite 400ms infinite alternate ease-in-out;
+}
+
+.no-select {
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  -o-user-select: none;
+  user-select: none;
+}
+
+@keyframes delayed-fadein {
+  0% { opacity: 0; }
+  72% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/** Delay the onset of the fade-in so the instructions and loading ellipsis do not appear at lal if the thoughts are loaded in under 1s. */
+.new-thought-instructions {
+  animation: 1.4s ease-out 0s normal forwards 1 delayed-fadein;
+}
+
+@keyframes preventAutoscroll {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.preventAutoscroll {
+  animation: 0.01s 1 preventAutoscroll;
+}
